@@ -9,6 +9,7 @@
           <div class="task"
             v-for="(task,$taskIndex) of column.tasks"
             :key="$taskIndex"
+            @click="goToTask(task)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
@@ -17,6 +18,11 @@
               {{ task.description }}
             </p>
           </div>
+          <input type="text"
+            class="block p-2 w-full bg-transparent"
+            placeholder="+ Enter new task"
+            @keyup.enter="createTask($event, column.tasks)"
+          />
         </div>
       </div>
     </div>
@@ -43,6 +49,16 @@ export default {
   methods: {
     close () {
       this.$router.push({ name: 'board' })
+    },
+    goToTask (task) {
+      this.$router.push({ name: 'task', params: { id: task.id } })
+    },
+    createTask (e, tasks) {
+      this.$store.commit('CREATE_TASK', {
+        tasks,
+        name: e.target.value
+      })
+      e.target.value = ''
     }
   }
 }
@@ -59,7 +75,8 @@ export default {
 }
 
 .task {
-  @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline
+  @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
+  cursor: pointer;
 }
 
 .task-bg {
