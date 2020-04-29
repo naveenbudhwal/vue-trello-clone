@@ -38,6 +38,17 @@
           />
         </div>
       </div>
+
+    <div class="column flex">
+      <input 
+        type="text"
+        class="p-2 mr-2 flex-grow"
+        placeholder="New Column Name"
+        v-model="newColumn"
+        @keyup.enter="createColumn"
+      >
+    </div>
+
     </div>
     <div
       class="task-bg"
@@ -59,6 +70,11 @@ export default {
       return this.$route.name === 'task'
     }
   },
+  data() {
+    return {
+      newColumn: ''
+    }
+  },
   methods: {
     close () {
       this.$router.push({ name: 'board' })
@@ -72,6 +88,12 @@ export default {
         name: e.target.value
       })
       e.target.value = ''
+    },
+    createColumn() {
+      this.$store.commit('CREATE_COLUMN', {
+        name: this.newColumn
+      })
+      this.newColumn = '  '
     },
     pickUpTask (e, taskIndex, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
